@@ -5,7 +5,13 @@ from __future__ import with_statement
 import os
 from logging import getLogger, StreamHandler, Formatter, getLoggerClass, DEBUG
 from threading import Lock
-import urllib2
+try:
+    from urllib.request import urlopen
+    from urllib.request import Request
+except:
+    from urllib2 import urlopen
+    from urllib2 import Request
+
 
 from lxml.builder import E
 
@@ -147,8 +153,8 @@ class BaseAPIClient(object):
     def send_request(self, url, data):
         """Sends data to the server on a request
         """
-        request = urllib2.Request(url=url, data=data.encode("utf-8"))
-        return urllib2.urlopen(request).read()
+        request = Request(url=url, data=data)
+        return urlopen(request).read()
 
     @classmethod
     def look_for_error(cls, response, request=None):
@@ -234,7 +240,7 @@ class BaseAPIClient(object):
                 'Attributes %s is/are required.' % ','.join(difference)
             )
 
-        return [E(k, v) for k, v in kwargs.iteritems()] + list(args)
+        return [E(k, v) for k, v in kwargs.items()] + list(args)
 
 
 if __name__ == '__main__':

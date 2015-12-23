@@ -15,7 +15,7 @@ from threading import Lock
 from lxml import etree, objectify
 from lxml.builder import E
 
-from base import BaseAPIClient
+from .base import BaseAPIClient
 
 
 _logger_lock = Lock()
@@ -165,10 +165,10 @@ class TimeInTransit(BaseAPIClient):
             time_in_transit_request
 
         """
-        full_request = '\n'.join([
-            '<?xml version="1.0" encoding="UTF-8" ?>',
+        full_request = b'\n'.join([
+            b'<?xml version="1.0" encoding="UTF-8" ?>',
             etree.tostring(self.access_request, pretty_print=True),
-            '<?xml version="1.0" encoding="UTF-8" ?>',
+            b'<?xml version="1.0" encoding="UTF-8" ?>',
             etree.tostring(time_in_transit_request, pretty_print=True),
         ])
         self.logger.debug("Request XML: %s", full_request)
